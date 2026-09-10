@@ -1,0 +1,47 @@
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import api from '../services/api';
+
+function Register() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  // Paso 5: borra la línea de abajo y descomenta handleSubmit() completo
+  // (hace POST a /register, guarda el token real y navega al tablero).
+  //const handleSubmit = (e) => { e.preventDefault(); };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await api.post('/register', { name, email, password });
+      localStorage.setItem('taskflow_token', response.data.token);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error(error);
+      alert('Error al registrar: ' + (error.response?.data?.message || error.message));
+    }
+  };
+
+  return (
+    <div>
+      <h2>Crear cuenta</h2>
+      <form onSubmit={handleSubmit}>
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre" />
+        <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Contraseña"
+        />
+        <button type="submit">Crear cuenta</button>
+      </form>
+      <p>
+        ¿Ya tienes cuenta? <Link to="/login">Iniciar sesión</Link>
+      </p>
+    </div>
+  );
+}
+
+export default Register;
