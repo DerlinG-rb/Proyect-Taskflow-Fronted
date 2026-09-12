@@ -5,17 +5,13 @@ function TaskCard({ id, title, status, onCambiarEstado, onEliminar }) {
     completada: null,
   };
 
-  // Paso 2: borra el return de abajo y descomenta el bloque completo
-  // (título + badge de estado + botón "Avanzar" + botón "Eliminar").
-  //return <div className="task-card">{title}</div>;
-
   return (
-    <div className="task-card">
+    <div className={`task-card ${status}`}>
       <h4>{title}</h4>
       <span className={`badge ${status}`}>{status}</span>
       {siguiente[status] && (
         <button onClick={() => onCambiarEstado(id, siguiente[status])}>
-          Avanzar
+          ➡️ Avanzar
         </button>
       )}
       <button onClick={() => onEliminar(id)} className="btn-eliminar">🗑</button>
